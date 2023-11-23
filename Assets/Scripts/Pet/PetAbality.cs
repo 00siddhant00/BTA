@@ -114,6 +114,12 @@ public class PetAbality : MonoBehaviour
 
     void PetStateCheck()
     {
+        if (combatScript.slashing)
+        {
+            playerMovement.Data = playerController.playerDataNoPet;
+            return;
+        }
+
         if (!isThrowing)
         {
             if (isThrown)

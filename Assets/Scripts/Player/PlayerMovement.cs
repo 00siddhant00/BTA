@@ -9,6 +9,9 @@ public class PlayerMovement : MonoBehaviour
     //Scriptable object which holds all the player's movement parameters. If you don't want to use it
     //just paste in all the parameters, though you will need to manuly change all references in this script
     public PlayerData Data;
+    public bool allowPlayerMovement;
+    public float runMaxSpeed;
+    public float runMaxSpeedNoPet;
 
     #region COMPONENTS
     public Rigidbody2D RB { get; private set; }
@@ -79,7 +82,7 @@ public class PlayerMovement : MonoBehaviour
         AnimHandler = GetComponent<PlayerAnimator>();
         currentTimeScale = Time.timeScale;
     }
-    bool timeSlowed;
+    //bool timeSlowed;
 
     float currentTimeScale;
     public float slowedGravity = 4;
@@ -88,7 +91,7 @@ public class PlayerMovement : MonoBehaviour
     {
         SetGravityScale(Data.gravityScale);
         IsFacingRight = true;
-        timeSlowed = false;
+        //timeSlowed = false;
     }
 
     void MoveDirectionCheck()
@@ -119,8 +122,16 @@ public class PlayerMovement : MonoBehaviour
         #endregion
 
         #region INPUT HANDLER
-        _moveInput.x = Input.GetAxisRaw("Horizontal");
-        _moveInput.y = Input.GetAxisRaw("Vertical");
+        if (allowPlayerMovement)
+        {
+            _moveInput.x = Input.GetAxisRaw("Horizontal");
+            _moveInput.y = Input.GetAxisRaw("Vertical");
+        }
+        else
+        {
+            _moveInput.x = 0;
+            _moveInput.y = 0;
+        }
 
         MoveDirectionCheck();
 
@@ -368,7 +379,7 @@ public class PlayerMovement : MonoBehaviour
 
     private IEnumerator PerformSleep(float duration)
     {
-        yield break;
+        //yield break;
         Time.timeScale = 0;
         yield return new WaitForSecondsRealtime(duration); //Must be Realtime since timeScale with be 0 
         Time.timeScale = 1f;
@@ -377,6 +388,24 @@ public class PlayerMovement : MonoBehaviour
 
     //MOVEMENT METHODS
     #region RUN METHODS
+
+    public void SlowPlayerByPercent(float percent)
+    {
+        // Ensure the input percentage is within the valid range (0 to 100)
+        percent = Mathf.Clamp(percent, 0f, 100f);
+
+        // Calculate the new run speed based on the percentage
+        Data.runMaxSpeed = runMaxSpeed * (1 - (percent / 100f));
+
+        // Make sure runMaxSpeed doesn't go below 0
+        Data.runMaxSpeed = Mathf.Max(0, Data.runMaxSpeed);
+    }
+
+    public void SetPlayerSpeed(float speed = -1)
+    {
+        Data.runMaxSpeed = speed < 0 ? runMaxSpeed : speed;
+    }
+
     private void Run(float lerpAmount)
     {
         //Calculate the direction we want to move in and our desired velocity
@@ -625,28 +654,5 @@ public class PlayerMovement : MonoBehaviour
             FindObjectOfType<AudioManager>().Play("hit");
             transform.position = spawnPoint.transform.position;
         }
-        //else if (collision.gameObject.CompareTag("enemy"))
-        //{
-        //    FindObjectOfType<AudioManager>().Play("Die");
-        //    SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
-        //}
     }
-
-    //private void OnTriggerEnter2D(Collider2D collision)
-    //{
-
-    //}
-
-    public void Reset()
-    {
-        Time.timeScale = 1f;
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
-    }
-
-    public void Quit()
-    {
-        Application.Quit();
-    }
-} // ok bhai
-
-// created by Dawnosaur :D
+}

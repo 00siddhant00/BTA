@@ -9,6 +9,8 @@ public class CameraShake : MonoBehaviour
 
     private CinemachineBasicMultiChannelPerlin _cbmcp;
 
+    public CinemachineConfiner Confiner;
+
     // Start is called before the first frame update
     void Awake()
     {

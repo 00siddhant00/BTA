@@ -5,8 +5,8 @@ using UnityEngine;
 public class PlayerAnimator : MonoBehaviour
 {
     private PlayerMovement mov;
-    private Animator anim;
-    private SpriteRenderer spriteRend;
+    //private Animator anim;
+    private Transform GFX;
 
     private DemoManager demoManager;
 
@@ -23,13 +23,11 @@ public class PlayerAnimator : MonoBehaviour
     public bool startedJumping { private get; set; }
     public bool justLanded { private get; set; }
 
-    public float currentVelY;
-
     private void Start()
     {
         mov = GetComponent<PlayerMovement>();
-        spriteRend = GetComponentInChildren<SpriteRenderer>();
-        anim = spriteRend.GetComponent<Animator>();
+        //anim = GFX.GetComponent<Animator>();
+        GFX = transform.GetChild(0);
 
         demoManager = FindObjectOfType<DemoManager>();
 
@@ -55,8 +53,8 @@ public class PlayerAnimator : MonoBehaviour
         }
 
         float newRot = ((tiltProgress * maxTilt * 2) - maxTilt);
-        float rot = Mathf.LerpAngle(spriteRend.transform.localRotation.eulerAngles.z * mult, newRot, tiltSpeed);
-        spriteRend.transform.localRotation = Quaternion.Euler(0, 0, rot * mult);
+        float rot = Mathf.LerpAngle(GFX.localRotation.eulerAngles.z * mult, newRot, tiltSpeed);
+        GFX.localRotation = Quaternion.Euler(0, 0, rot * mult);
         #endregion
 
         CheckAnimationState();
@@ -71,8 +69,8 @@ public class PlayerAnimator : MonoBehaviour
     {
         if (startedJumping)
         {
-            anim.SetTrigger("Jump");
-            GameObject obj = Instantiate(jumpFX, transform.position - (Vector3.up * transform.localScale.y / 2), Quaternion.Euler(-90, 0, 0));
+            //anim.SetTrigger("Jump");
+            GameObject obj = Instantiate(jumpFX, transform.position - (Vector3.up * 1.25f), Quaternion.Euler(-90, 0, 0));
             Destroy(obj, 1);
             startedJumping = false;
             return;
@@ -81,13 +79,13 @@ public class PlayerAnimator : MonoBehaviour
         if (justLanded)
         {
             GameManager.Instance.CameraShake.ShakeCamera(0.7f, 0.29f, 0.15f);
-            anim.SetTrigger("Land");
-            GameObject obj = Instantiate(landFX, transform.position - (Vector3.up * transform.localScale.y / 1.5f), Quaternion.Euler(-90, 0, 0));
+            //anim.SetTrigger("Land");
+            GameObject obj = Instantiate(landFX, transform.position - (Vector3.up * 1.25f), Quaternion.Euler(-90, 0, 0));
             Destroy(obj, 1);
             justLanded = false;
             return;
         }
 
-        anim.SetFloat("Vel Y", mov.RB.velocity.y);
+        //anim.SetFloat("Vel Y", mov.RB.velocity.y);
     }
 }

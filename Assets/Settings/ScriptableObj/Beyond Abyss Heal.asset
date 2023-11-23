@@ -20,9 +20,9 @@ MonoBehaviour:
   maxFastFallSpeed: 20
   runMaxSpeed: 0.01
   runAcceleration: 0.01
-  runAccelAmount: 50
+  runAccelAmount: 0
   runDecceleration: 0.01
-  runDeccelAmount: 50
+  runDeccelAmount: 0
   accelInAir: 1
   deccelInAir: 1
   doConserveMomentum: 0

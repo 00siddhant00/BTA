@@ -10,25 +10,24 @@ public class PlayerHealth : MonoBehaviour
 
     public float playerCurrentHealth;
 
-    PlayerHealth()
-    {
-        perChunkValue = 1f / healthSlotes;
-    }
-
     // Start is called before the first frame update
     void Start()
     {
-        img.material.SetFloat("_Health", 1);
-        playerCurrentHealth = 1f;
+        perChunkValue = 1f / healthSlotes;
+        img.material.SetFloat("_Health", playerCurrentHealth);
     }
 
     // Update is called once per frame
     void Update()
     {
-        //if (Input.GetKeyDown(KeyCode.F))
-        //{
-
-        //}
+        if (Input.GetKeyDown(KeyCode.F) && Input.GetKey(KeyCode.LeftShift))
+        {
+            HealPlayer(healthSlotes);
+        }
+        else if (Input.GetKeyDown(KeyCode.F))
+        {
+            DamagePlayer(healthSlotes);
+        }
     }
 
 
@@ -38,6 +37,12 @@ public class PlayerHealth : MonoBehaviour
     /// <param name="damageMultiplier"> number of chunke to remove/take damage</param>
     public void DamagePlayer(int damageMultiplier = 1)
     {
+        ////Apllying max damage
+        //if (damageMultiplier > perChunkValue * damageMultiplier)
+        //{
+        //    damageMultiplier = (int)(perChunkValue * damageMultiplier);
+        //}
+
         playerCurrentHealth = img.material.GetFloat("_Health") - (perChunkValue * damageMultiplier);
 
         float tolerance = 1e-6f; // A small tolerance value
@@ -51,7 +56,10 @@ public class PlayerHealth : MonoBehaviour
         if (playerCurrentHealth <= 0)
         {
             if (!invinsible)
-                GetComponent<PlayerMovement>().Reset();
+            {
+                GetComponent<PlayerMovement>().SetPlayerSpeed();
+                GameManager.Instance.SceneManager.Restart();
+            }
         }
     }
 

@@ -1,10 +1,12 @@
 using System.Collections;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class PlayerCombat : MonoBehaviour
 {
     //Mele combat
     //Heal from Zin
+    [Header("Mele")]
     public bool meleAllowed;
     [SerializeField] private Transform attackPoint;
     [SerializeField] private float attackRange;
@@ -12,17 +14,21 @@ public class PlayerCombat : MonoBehaviour
     [SerializeField] private float attackDistance = 1.5f;
     private float nextTimeToAttack;
 
-    private PlayerMovement playerMovement;
     Rigidbody2D rb;
     Vector2 hitDirection;
+    PlayerController playerController;
     public LayerMask damagableLayer;
     public GameObject Slash;
     public bool slashing;
 
+    [Header("KnockBack")]
+    public float knockBackForce = 20;
+    public float knockBackDuration = 0.5f;
+
     private void Start()
     {
-        playerMovement = GetComponent<PlayerMovement>();
         rb = GetComponent<Rigidbody2D>();
+        playerController = GetComponent<PlayerController>();
     }
 
     private void Update()
@@ -42,38 +48,33 @@ public class PlayerCombat : MonoBehaviour
 
     void Attack()
     {
+        slashing = true;
         //Detect enemies in range of attack
         Collider2D[] hitDamagable = Physics2D.OverlapCircleAll(attackPoint.position, attackRange, damagableLayer);
 
         foreach (Collider2D hit in hitDamagable)
         {
-            if (hit.TryGetComponent<EnemyHealth>(out var enemyHealth))
-            {
-                enemyHealth.Damage();
-            }
-
             if (hit.TryGetComponent<BreakableWall>(out var breakableWall))
             {
                 breakableWall.Damage();
             }
 
-            if (hit.TryGetComponent<EnemyData>(out var enemyData))
+            if (hit.TryGetComponent<EnemyBase>(out var enemyBase))
             {
                 // Check if the hit object has an EnemyData component
-                // You can access the child class (e.g., Neph) through the parent class reference
-                Neph neph = enemyData as Neph;
-                if (neph != null)
+                if (enemyBase != null)
                 {
-                    neph.ApplyKnockBack(hitDirection);
-                    if (hitDirection == new Vector2(0, -1) || hitDirection == new Vector2(0, 1))
-                        ApplyKnockBack(hitDirection * -1, 0.5f, 20);
-                    // You have successfully accessed the Neph component
-                    // You can now use neph for specific Neph behavior
+                    GameManager.Instance.TimeSlow(100, 0.1f); //when enemy is hit it time stops for 0.1 sec for emphasis effect
+
+                    enemyBase.Damage();
+                    enemyBase.ApplyKnockBack(hitDirection);
                 }
             }
+
+            if (hitDirection == new Vector2(0, -1) || hitDirection == new Vector2(0, 1))
+                ApplyKnockBack(hitDirection * -1, knockBackDuration, knockBackForce);
         }
 
-        slashing = true;
         Slash.SetActive(true);
 
         StartCoroutine(OffSlash());
@@ -87,6 +88,7 @@ public class PlayerCombat : MonoBehaviour
         GameManager.Instance.pet.ShowPet();
         slashing = false;
         Slash.SetActive(false);
+        //playerController.playerMovement.allowPlayerMovement = true;
     }
 
     public void ApplyKnockBack(Vector2 direction, float duration, float force)
@@ -108,6 +110,8 @@ public class PlayerCombat : MonoBehaviour
     /// </summary>
     void SwitchingAttackPoint()
     {
+        if (slashing) return;
+
         Vector3 newPosition = new Vector3(attackDistance, 0, 0); // Default position
         Slash.transform.localRotation = Quaternion.Euler(0, 0, 0);
 

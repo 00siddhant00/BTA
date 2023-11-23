@@ -5,7 +5,7 @@ using UnityEngine;
 public class PetHealMode : MonoBehaviour
 {
     public bool foundEnemy;
-    public EnemyHealth enemyHealth;
+    public EnemyBase enemyHealth;
 
     private void OnTriggerEnter2D(Collider2D col)
     {
@@ -14,7 +14,7 @@ public class PetHealMode : MonoBehaviour
         if (col.gameObject.tag == "enemy")
         {
             foundEnemy = true;
-            enemyHealth = col.GetComponent<EnemyHealth>();
+            enemyHealth = col.GetComponent<EnemyBase>();
             transform.parent = col.gameObject.transform;
         }
     }

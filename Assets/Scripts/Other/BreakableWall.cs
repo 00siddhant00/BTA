@@ -47,28 +47,52 @@ public class BreakableWall : MonoBehaviour
             GameManager.Instance.CameraShake.ShakeCamera(3f, 0.15f, 0.2f);
             takenHits++;
             mask.sprite = stages[takenHits - 1];
-            SpawnFx();
+            SpawnFx(Fx);
         }
         else
         {
             GameManager.Instance.CameraShake.ShakeCamera(5f, 0.2f, 0.3f);
-            SpawnFx();
+            SpawnFx(Fx);
+            mask.gameObject.SetActive(false);
             GameObject endFx = Instantiate(finalFx, effectSpawn.position + new Vector3(-7, 1.5f, 0), Quaternion.Euler(90, 0, 0));
+            var p = endFx.GetComponent<ParticleSystem>();
+            // Access the main module and set the start color
+            var mainModule = p.main;
+            mainModule.startColor = transform.GetChild(1).GetComponent<SpriteRenderer>().color;
+
             Destroy(endFx, 1);
             var sr = transform.GetChild(1).GetComponent<SpriteRenderer>();
             Color color = sr.color;
             color.a = afterBrokenOpacity;
             sr.color = color;
 
-            mask.gameObject.SetActive(false);
             GetComponent<BoxCollider2D>().enabled = false;
             transform.GetChild(1).GetComponent<BoxCollider2D>().enabled = false;
+
+            if (transform.GetChild(1).childCount > 0)
+            {
+                foreach (Transform child in transform.GetChild(1))
+                {
+                    SpriteRenderer spr = child.GetComponent<SpriteRenderer>();
+                    Color c = spr.color;
+                    c.a = afterBrokenOpacity;
+                    spr.color = c;
+                    child.GetComponent<BoxCollider2D>().enabled = false;
+                }
+            }
         }
     }
 
-    void SpawnFx()
+    void SpawnFx(GameObject FX)
     {
-        GameObject fx = Instantiate(Fx, effectSpawn.position, effectSpawn.rotation);
+        GameObject fx = Instantiate(FX, effectSpawn.position, effectSpawn.rotation);
+        var p = fx.GetComponent<ParticleSystem>();
+
+        // Access the main module and set the start color
+        var mainModule = p.main;
+        mainModule.startColor = transform.GetChild(1).GetComponent<SpriteRenderer>().color;
+
         Destroy(fx, 1);
     }
+
 }

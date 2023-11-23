@@ -25,7 +25,7 @@ public class Follow : MonoBehaviour
         if (target != null)
             if (followType == FollowType.Fixed)
                 transform.position = target.position;
-            else transform.position = Vector3.Lerp(transform.position, target.position, followSpeed);
+            else transform.position = Vector3.Lerp(transform.position, target.position, followSpeed * Time.deltaTime);
         else if (destroyIfNullTarget && target == null)
         {
             Destroy(this.gameObject);

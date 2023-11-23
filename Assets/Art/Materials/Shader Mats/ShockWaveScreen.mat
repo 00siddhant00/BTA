@@ -44,6 +44,10 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - _SampleTexture2D_5fa1992a75644b6ca46706fc391326c3_Texture_1_Texture2D:
+        m_Texture: {fileID: 2800000, guid: 9913993939c40854c85441f844528c8e, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _SampleTexture2D_d31f97b0ee8841ad89ea598b98c00b49_Texture_1_Texture2D:
         m_Texture: {fileID: 2800000, guid: 46cdf575c5f5b6f458a71c7702879d72, type: 3}
         m_Scale: {x: 1, y: 1}
@@ -71,7 +75,7 @@ Material:
     - _QueueOffset: 0
     - _ShockWaveStrength: 0
     - _Size: 0.045
-    - _Speed: 1
+    - _Speed: 4
     - _Stencil: 0
     - _StencilComp: 8
     - _StencilOp: 0
