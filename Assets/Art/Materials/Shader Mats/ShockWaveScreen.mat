@@ -74,7 +74,7 @@ Material:
     - _QueueControl: 0
     - _QueueOffset: 0
     - _ShockWaveStrength: 0
-    - _Size: 0.045
+    - _Size: 0.45
     - _Speed: 4
     - _Stencil: 0
     - _StencilComp: 8

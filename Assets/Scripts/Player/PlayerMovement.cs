@@ -652,7 +652,8 @@ public class PlayerMovement : MonoBehaviour
         if (collision.gameObject.CompareTag("Spike"))
         {
             FindObjectOfType<AudioManager>().Play("hit");
-            transform.position = spawnPoint.transform.position;
+            //transform.position = spawnPoint.transform.position;
+            GetComponent<PlayerHealth>().DamagePlayer(1000);
         }
     }
 }

@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using BeyondAbyss.Enemy;
 
 public class GameManager : MonoBehaviour
 {
@@ -111,18 +112,18 @@ public class GameManager : MonoBehaviour
             {
                 Destroy(enemy);
             }
-
-            GameObject Enemy = null;
             //Respawn Enemies with saved stats
             for (int i = 0; i < gameData.EnemiesInActiveSection.Count; i++)
             {
-                Enemy = Instantiate(enemyManager.GetEnemyFromId(gameData.EnemiesInActiveSection[i].id), AreaData.transform.GetChild(gameData.LastActiveSection).GetComponent<SectionData>().Enemies[0].transform.parent);
+                GameObject Enemy = Instantiate(enemyManager.GetEnemyFromId(gameData.EnemiesInActiveSection[i].id), AreaData.transform.GetChild(gameData.LastActiveSection).GetComponent<SectionData>().Enemies[0].transform.parent);
 
                 Enemy.transform.localPosition = new Vector3(gameData.EnemiesInActiveSection[i].enemyParentPosX, gameData.EnemiesInActiveSection[i].enemyParentPosY, 0);
 
                 Enemy.transform.GetChild(0).localPosition = new Vector3(gameData.EnemiesInActiveSection[i].enemyPosX, gameData.EnemiesInActiveSection[i].enemyPosY, 0);
 
                 Enemy.transform.GetChild(0).GetComponent<EnemyBase>().healthPoints = gameData.EnemiesInActiveSection[i].CurrentHealthPoints;
+
+                Enemy.transform.GetChild(0).GetComponent<EnemyBase>().isImmortal = gameData.EnemiesInActiveSection[i].isImmortal;
 
                 StartCoroutine(SetEnemyData(gameData, Enemy));
             }
@@ -151,12 +152,12 @@ public class GameManager : MonoBehaviour
 
     public void TimeSlow(int slowAmount = 100, float forSec = 1)
     {
-        slowAmount = slowAmount < 0 ? 0 : slowAmount > 100 ? 100 : slowAmount;
+        slowAmount = Mathf.Clamp(slowAmount, 0, 100);
         Time.timeScale = (100 - slowAmount) / 100.0f;
         StartCoroutine(TimeBackToNormal(forSec));
     }
 
-    IEnumerator TimeBackToNormal(float sec)
+    private IEnumerator TimeBackToNormal(float sec)
     {
         float startTime = Time.realtimeSinceStartup;
         while (Time.realtimeSinceStartup - startTime < sec)
@@ -191,6 +192,7 @@ public class GameManager : MonoBehaviour
                 {
                     id = _enemy.EnemyId,
                     CurrentHealthPoints = _enemy.healthPoints,
+                    isImmortal = _enemy.isImmortal,
 
                     enemyParentPosX = enemy.transform.localPosition.x,
                     enemyParentPosY = enemy.transform.localPosition.y,

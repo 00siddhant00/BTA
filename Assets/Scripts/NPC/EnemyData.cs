@@ -16,6 +16,7 @@ public class Enemy
 {
     public int id;
     public int CurrentHealthPoints;
+    public bool isImmortal;
 
     public float enemyParentPosX;
     public float enemyParentPosY;

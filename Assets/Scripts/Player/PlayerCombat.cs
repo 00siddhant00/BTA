@@ -1,6 +1,7 @@
 using System.Collections;
 using Unity.VisualScripting;
 using UnityEngine;
+using BeyondAbyss.Enemy;
 
 public class PlayerCombat : MonoBehaviour
 {
@@ -59,12 +60,12 @@ public class PlayerCombat : MonoBehaviour
                 breakableWall.Damage();
             }
 
-            if (hit.TryGetComponent<EnemyBase>(out var enemyBase))
+            if (hit.TryGetComponent(out EnemyBase enemyBase))
             {
                 // Check if the hit object has an EnemyData component
                 if (enemyBase != null)
                 {
-                    GameManager.Instance.TimeSlow(100, 0.1f); //when enemy is hit it time stops for 0.1 sec for emphasis effect
+                    GameManager.Instance.TimeSlow(forSec: 0.1f); //when enemy is hit it time stops for 0.1 sec for emphasis effect
 
                     enemyBase.Damage();
                     enemyBase.ApplyKnockBack(hitDirection);
