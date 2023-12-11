@@ -1,9 +1,6 @@
 using System.Collections;
 using UnityEngine;
 
-
-namespace BeyondAbyss.Enemy
-{
     public class EnemyBase : MonoBehaviour
     {
         public int EnemyId;
@@ -99,4 +96,3 @@ namespace BeyondAbyss.Enemy
             }
         }
     }
-}
