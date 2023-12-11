@@ -9,10 +9,15 @@ public class PlayerHealth : MonoBehaviour
     float perChunkValue;
 
     public float playerCurrentHealth;
+    public PlayerMovement playerMovement;
 
     // Start is called before the first frame update
     void Start()
     {
+        playerMovement = GetComponent<PlayerMovement>();
+
+        if (playerMovement.isReplayingFuture) return;
+
         perChunkValue = 1f / healthSlotes;
         img.material.SetFloat("_Health", playerCurrentHealth);
     }
@@ -20,11 +25,11 @@ public class PlayerHealth : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.F) && Input.GetKey(KeyCode.LeftShift))
+        if (Input.GetKeyDown(KeyCode.Q) && Input.GetKey(KeyCode.LeftShift))
         {
             HealPlayer(healthSlotes);
         }
-        else if (Input.GetKeyDown(KeyCode.F))
+        else if (Input.GetKeyDown(KeyCode.Q))
         {
             DamagePlayer(healthSlotes);
         }
@@ -37,6 +42,7 @@ public class PlayerHealth : MonoBehaviour
     /// <param name="damageMultiplier"> number of chunke to remove/take damage</param>
     public void DamagePlayer(int damageMultiplier = 1)
     {
+        if (playerMovement.isReplayingFuture) return;
         ////Apllying max damage
         //if (damageMultiplier > perChunkValue * damageMultiplier)
         //{
@@ -65,6 +71,7 @@ public class PlayerHealth : MonoBehaviour
 
     public void HealPlayer(int healMultiplier = 1)
     {
+        if (playerMovement.isReplayingFuture) return;
         playerCurrentHealth = img.material.GetFloat("_Health") + (perChunkValue * healMultiplier);
 
         img.material.SetFloat("_Health", playerCurrentHealth);

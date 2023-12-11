@@ -217,17 +217,6 @@ public class PetAbality : MonoBehaviour
     {
         if (petInstance.GetComponent<PetHealMode>().enemyHealth != null && petInstance.GetComponent<PetHealMode>().enemyHealth.healthPoints <= 0) return;
 
-        if (petInstance.GetComponent<PetHealMode>().enemyHealth.isImmortal)
-        {
-            if (petInstance.GetComponent<PetHealMode>() != null && petInstance.GetComponent<PetHealMode>().foundEnemy)
-            {
-                GameManager.Instance.playerController.petAbality.CallBackPet();
-                GameManager.Instance.playerController.petAbality.StopHealing();
-                GameManager.Instance.playerController.petAbality.isButtonUp = true;
-            }
-            return;
-        }
-
         if (playerController.playerHealth.playerCurrentHealth >= 1)
         {
             StopHealing();

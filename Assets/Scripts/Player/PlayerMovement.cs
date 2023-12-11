@@ -1,8 +1,11 @@
+using System;
 using System.Collections;
+using System.Collections.Generic;
 using Assets.Scripts.Other;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using static UnityEditor.ShaderGraph.Internal.KeywordDependentCollection;
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -81,6 +84,7 @@ public class PlayerMovement : MonoBehaviour
         RB = GetComponent<Rigidbody2D>();
         AnimHandler = GetComponent<PlayerAnimator>();
         currentTimeScale = Time.timeScale;
+        previousJumpInFuture = 69;
     }
     //bool timeSlowed;
 
@@ -109,8 +113,43 @@ public class PlayerMovement : MonoBehaviour
         //Time.timeScale = currentTimeScale;
     }
 
+    void printTimeStamp()
+    {
+        foreach (var t in InputRecorder.i.moveInputHistory)
+        {
+            print(t.Item1 + " : " + t.Item2);
+        }
+    }
+
+    [Header("Time")]
+    public bool isReplayingFuture;
+    private Vector2 previousMoveInput = new(6, 9);
+    public float startTimeInFutureWhenInFuture = 0f;
+    private int currentReplayIndex = 0;
+    private int currentJumpReplayIndex = 0;
+    bool setOnceReplay;
+    bool setOnceReplayForJump;
+    float timePassed;
+
+    float nextReplayTime;
+    float nextJumpReplayTime;
+
+    bool timeOnce;
+    bool timeOnce2;
+    bool timeJumpOnce;
+
+    int isJumpingInFuture;
+    int previousJumpInFuture = 69;
+
+    int isJumpingInPresentTimeFutureVarient;
+
     private void Update()
     {
+        if (Input.GetKeyDown(KeyCode.T))
+        {
+            printTimeStamp();
+        }
+
         #region TIMERS
         LastOnGroundTime -= Time.deltaTime;
         LastOnWallTime -= Time.deltaTime;
@@ -121,17 +160,78 @@ public class PlayerMovement : MonoBehaviour
         LastPressedDashTime -= Time.deltaTime;
         #endregion
 
+        MoveDirectionCheck();
+
         #region INPUT HANDLER
-        if (allowPlayerMovement)
+        if (!isReplayingFuture)
         {
-            _moveInput.x = Input.GetAxisRaw("Horizontal");
-            _moveInput.y = Input.GetAxisRaw("Vertical");
+            if (allowPlayerMovement)
+            {
+                _moveInput.x = Input.GetAxisRaw("Horizontal");
+                _moveInput.y = Input.GetAxisRaw("Vertical");
+            }
+            else
+            {
+                _moveInput.x = 0;
+                _moveInput.y = 0;
+            }
         }
+
+        #region Replay Future Actions
+
         else
         {
-            _moveInput.x = 0;
-            _moveInput.y = 0;
+            // Replay recorded inputs based on the timeline
+            if (currentReplayIndex < InputRecorder.i.moveInputHistory.Count)
+            {
+                // Get the recorded input and time from the history
+                Vector2 recordedInput = InputRecorder.i.moveInputHistory[currentReplayIndex].Item1;
+                float recordedTime = InputRecorder.i.moveInputHistory[currentReplayIndex].Item2;
+
+                if (!timeOnce2)
+                {
+                    transform.position = InputRecorder.i.PlayerPosRec;
+                    timeOnce2 = true;
+                }
+
+                if (!setOnceReplay)
+                {
+                    nextReplayTime = Time.time + recordedTime;
+                    setOnceReplay = true;
+                }
+
+                // Check if the time passed since the start of replaying is greater than the recorded time
+                if (Time.time < nextReplayTime)
+                {
+                    _moveInput = recordedInput;
+                }
+                else
+                {
+                    // Time has passed, freeze _moveInput
+                    //_moveInput = recordedInput;
+                    _moveInput = Vector2.zero;
+                    setOnceReplay = false;
+                    currentReplayIndex++;
+                }
+            }
+            else
+            {
+                // Finished replaying, stop replay mode
+                isReplayingFuture = false;
+                currentReplayIndex = 0;
+                timeOnce2 = false;
+
+                InputRecorder.i.calledFutureInstance = false;
+                InputRecorder.i.startTimeInPresent = 340282346638528859811704183484516925440.000000f;
+                InputRecorder.i.PlayerMultipleFutureInstancePos.Clear();
+                InputRecorder.i.jumpInputHistory.Clear();
+                InputRecorder.i.PlayerMultipleFutureInstanceChangeIndex = 0;
+                InputRecorder.i.zinInstance.SetActive(false);
+                Destroy(gameObject);
+            }
         }
+
+        #endregion
 
         MoveDirectionCheck();
 
@@ -141,20 +241,143 @@ public class PlayerMovement : MonoBehaviour
         if (_moveInput.x != 0)
             CheckDirectionToFace(_moveInput.x > 0);
 
-        if (Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.C) || Input.GetKeyDown(KeyCode.J))
+        if (!isReplayingFuture)
         {
-            OnJumpInput();
+            if (Input.GetKeyDown(KeyCode.Space))
+            {
+                isJumpingInFuture = 1;
+                OnJumpInput();
+            }
+            else isJumpingInFuture = 0;
+
+            if (Input.GetKeyUp(KeyCode.Space))
+            {
+                OnJumpUpInput();
+            }
+
+            if (Input.GetKeyDown(KeyCode.X) || Input.GetKeyDown(KeyCode.LeftShift) || Input.GetKeyDown(KeyCode.K))
+            {
+                OnDashInput();
+            }
+        }
+        else
+        {
+            // Replay recorded inputs based on the timeline
+            if (currentJumpReplayIndex < InputRecorder.i.jumpInputHistory.Count)
+            {
+                // Get the recorded input and time from the history
+                int recordedJumpInput = InputRecorder.i.jumpInputHistory[currentJumpReplayIndex].Item1;
+                float recordedTime = InputRecorder.i.jumpInputHistory[currentJumpReplayIndex].Item2;
+
+                if (!timeJumpOnce)
+                {
+                    isJumpingInPresentTimeFutureVarient = 0;
+                    timeJumpOnce = true;
+                }
+
+                if (!setOnceReplayForJump)
+                {
+                    nextJumpReplayTime = Time.time + recordedTime;
+                    setOnceReplayForJump = true;
+                }
+
+                //print("every frame : " + isJumpingInPresentTimeFutureVarient);
+
+                // Check if the time passed since the start of replaying is greater than the recorded time
+                if (Time.time < nextJumpReplayTime)
+                {
+                    isJumpingInPresentTimeFutureVarient = recordedJumpInput;
+                    print($"Playing : {isJumpingInPresentTimeFutureVarient} : {recordedTime}");
+                    if (isJumpingInPresentTimeFutureVarient == 1)
+                    {
+                        OnJumpInput();
+                    }
+                    else
+                    {
+                        OnJumpUpInput();
+                    }
+                }
+                else
+                {
+                    //isJumpingInPresentTimeFutureVarient = false;
+                    setOnceReplayForJump = false;
+                    currentJumpReplayIndex++;
+                }
+            }
         }
 
-        if (Input.GetKeyUp(KeyCode.Space) || Input.GetKeyUp(KeyCode.C) || Input.GetKeyUp(KeyCode.J))
+
+        #region Future move record
+
+        if (InputRecorder.i.inFuture)
         {
-            OnJumpUpInput();
+            if (InputRecorder.i.goingInMultipleFutures) return;
+
+            float currentTime = Time.time;
+
+            // Check if this is the first frame when inFuture becomes true
+            if (startTimeInFutureWhenInFuture == 0f)
+            {
+                InputRecorder.i.PlayerPosRec = transform.position;
+                InputRecorder.i.moveInputHistory.Clear();
+                timeOnce = false;
+                startTimeInFutureWhenInFuture = currentTime;
+            }
+
+            // Calculate the time passed since inFuture became true
+            timePassed = currentTime - startTimeInFutureWhenInFuture;
+
+            // Check if moveInput has changed since the previous frame
+            if (_moveInput != previousMoveInput)
+            {
+                // Add a tuple to the list containing the moveInput and the seconds passed
+                InputRecorder.i.moveInputHistory.Add((previousMoveInput, timePassed));
+                startTimeInFutureWhenInFuture = currentTime;
+            }
+
+            if (isJumpingInFuture != previousJumpInFuture)
+            {
+                InputRecorder.i.jumpInputHistory.Add((previousJumpInFuture, timePassed));
+            }
+
+            // Update the previousMoveInput for the next frame
+            previousMoveInput = _moveInput;
+            previousJumpInFuture = isJumpingInFuture;
+        }
+        else
+        {
+            if (!timeOnce)
+            {
+                InputRecorder.i.moveInputHistory.Add((previousMoveInput, timePassed));
+                InputRecorder.i.jumpInputHistory.Add((previousJumpInFuture, timePassed));
+                timeOnce = true;
+
+                // Remove the item at index 0 if it exists and the list is not empty
+                if (InputRecorder.i.moveInputHistory.Count > 0 && InputRecorder.i.moveInputHistory[0].Item1 == new Vector2(6, 9))
+                {
+                    InputRecorder.i.moveInputHistory.RemoveAt(0);
+                    //InputRecorder.i.jumpInputHistory.RemoveAt(0);
+                    // Optionally sort the list if order matters
+                    // moveInputHistory.Sort((a, b) => a.Item2.CompareTo(b.Item2));
+                }
+
+                if (InputRecorder.i.jumpInputHistory.Count > 0 && InputRecorder.i.jumpInputHistory[0].Item1 == 69)
+                {
+                    print("removed");
+                    InputRecorder.i.jumpInputHistory.RemoveAt(0);
+                    // Optionally sort the list if order matters
+                    // moveInputHistory.Sort((a, b) => a.Item2.CompareTo(b.Item2));
+                }
+                //timeOnce2 = false;
+            }
+            // Reset the timer when inFuture becomes false
+            startTimeInFutureWhenInFuture = 0f;
         }
 
-        if (Input.GetKeyDown(KeyCode.X) || Input.GetKeyDown(KeyCode.LeftShift) || Input.GetKeyDown(KeyCode.K))
-        {
-            OnDashInput();
-        }
+        #endregion
+
+
+        #endregion
 
         //if (Input.GetMouseButtonDown(1))
         //{
@@ -164,7 +387,6 @@ public class PlayerMovement : MonoBehaviour
         //{
         //    ToggleTime();
         //}
-        #endregion
 
         #region COLLISION CHECKS
         if (!IsDashing && !IsJumping)
@@ -525,7 +747,7 @@ public class PlayerMovement : MonoBehaviour
         LastOnGroundTime = 0;
         LastPressedDashTime = 0;
 
-        float startTime = Time.time;
+        float startTimeInFuture = Time.time;
 
         _dashesLeft--;
         _isDashAttacking = true;
@@ -533,7 +755,7 @@ public class PlayerMovement : MonoBehaviour
         SetGravityScale(0);
 
         //We keep the player's velocity at the dash speed during the "attack" phase (in celeste the first 0.15s)
-        while (Time.time - startTime <= Data.dashAttackTime)
+        while (Time.time - startTimeInFuture <= Data.dashAttackTime)
         {
             RB.velocity = dir.normalized * Data.dashSpeed;
             //Pauses the loop until the next frame, creating something of a Update loop. 
@@ -541,7 +763,7 @@ public class PlayerMovement : MonoBehaviour
             yield return null;
         }
 
-        startTime = Time.time;
+        startTimeInFuture = Time.time;
 
         _isDashAttacking = false;
 
@@ -549,7 +771,7 @@ public class PlayerMovement : MonoBehaviour
         SetGravityScale(Data.gravityScale);
         RB.velocity = Data.dashEndSpeed * dir.normalized;
 
-        while (Time.time - startTime <= Data.dashEndTime)
+        while (Time.time - startTimeInFuture <= Data.dashEndTime)
         {
             yield return null;
         }
@@ -652,8 +874,7 @@ public class PlayerMovement : MonoBehaviour
         if (collision.gameObject.CompareTag("Spike"))
         {
             FindObjectOfType<AudioManager>().Play("hit");
-            //transform.position = spawnPoint.transform.position;
-            GetComponent<PlayerHealth>().DamagePlayer(1000);
+            transform.position = spawnPoint.transform.position;
         }
     }
 }

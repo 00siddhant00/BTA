@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using BeyondAbyss.Enemy;
 
 public class PetHealMode : MonoBehaviour
 {
@@ -10,10 +9,9 @@ public class PetHealMode : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D col)
     {
-        if (!col.gameObject.CompareTag("Player") && !col.gameObject.CompareTag("Boundry"))
+        if (col.gameObject.tag != "Player" && col.gameObject.tag != "Boundry")
             GetComponent<Rigidbody2D>().velocity = Vector3.zero;
-
-        if (col.gameObject.CompareTag("enemy"))
+        if (col.gameObject.tag == "enemy")
         {
             foundEnemy = true;
             enemyHealth = col.GetComponent<EnemyBase>();

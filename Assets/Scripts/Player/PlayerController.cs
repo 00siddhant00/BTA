@@ -10,12 +10,15 @@ public class PlayerController : MonoBehaviour
     [HideInInspector] public PlayerCombat playerCombat;
     [HideInInspector] public PetAbality petAbality;
 
+    public GameObject TimeFreezPanal;
     public PlayerData playerDataNoPet;
     public PlayerData playerDataWithPet;
     public PlayerData playerDataHeal;
 
     private void Awake()
     {
+        TimeFreezPanal = transform.GetChild(transform.childCount - 1).gameObject;
+        TimeFreezPanal.SetActive(false);
         playerMovement = GetComponent<PlayerMovement>();
         playerHealth = GetComponent<PlayerHealth>();
         playerAnimator = GetComponent<PlayerAnimator>();

@@ -19,15 +19,20 @@ public class PlayerAnimator : MonoBehaviour
     [SerializeField] private GameObject landFX;
     private ParticleSystem _jumpParticle;
     private ParticleSystem _landParticle;
+    private Animator legsAnim;
+    public bool isMoving;
 
     public bool startedJumping { private get; set; }
     public bool justLanded { private get; set; }
+
+    public bool isGrounded = true;
 
     private void Start()
     {
         mov = GetComponent<PlayerMovement>();
         //anim = GFX.GetComponent<Animator>();
         GFX = transform.GetChild(0);
+        legsAnim = GFX.GetChild(2).GetComponent<Animator>();
 
         demoManager = FindObjectOfType<DemoManager>();
 
@@ -41,6 +46,12 @@ public class PlayerAnimator : MonoBehaviour
         float tiltProgress;
 
         int mult = -1;
+
+        isMoving = mov._moveInput.x != 0;
+        MoveAnim();
+
+        if (startedJumping) isGrounded = false;
+        if (justLanded) isGrounded = true;
 
         if (mov.IsSliding)
         {
@@ -63,6 +74,11 @@ public class PlayerAnimator : MonoBehaviour
         jumpPSettings.startColor = new ParticleSystem.MinMaxGradient(demoManager.SceneData.foregroundColor);
         ParticleSystem.MainModule landPSettings = _landParticle.main;
         landPSettings.startColor = new ParticleSystem.MinMaxGradient(demoManager.SceneData.foregroundColor);
+    }
+
+    private void MoveAnim()
+    {
+        legsAnim.SetBool("IsRunning", isMoving);
     }
 
     private void CheckAnimationState()

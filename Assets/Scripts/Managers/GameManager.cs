@@ -2,7 +2,6 @@ using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using BeyondAbyss.Enemy;
 
 public class GameManager : MonoBehaviour
 {
@@ -16,10 +15,15 @@ public class GameManager : MonoBehaviour
     public ScenesManager SceneManager;
     public EnemyManager enemyManager;
     public CameraShake CameraShake;
+    public PuzzleBase PuzzleBase;
 
     [Header("Level")]
     public AreaData AreaData;
     public float gateSpawnDistance;
+
+    [Header("System")]
+    public GameObject Info;
+    bool infoToggle;
 
     private IDataService dataService = new JsonDataService();
 
@@ -112,18 +116,18 @@ public class GameManager : MonoBehaviour
             {
                 Destroy(enemy);
             }
+
+            GameObject Enemy = null;
             //Respawn Enemies with saved stats
             for (int i = 0; i < gameData.EnemiesInActiveSection.Count; i++)
             {
-                GameObject Enemy = Instantiate(enemyManager.GetEnemyFromId(gameData.EnemiesInActiveSection[i].id), AreaData.transform.GetChild(gameData.LastActiveSection).GetComponent<SectionData>().Enemies[0].transform.parent);
+                Enemy = Instantiate(enemyManager.GetEnemyFromId(gameData.EnemiesInActiveSection[i].id), AreaData.transform.GetChild(gameData.LastActiveSection).GetComponent<SectionData>().Enemies[0].transform.parent);
 
                 Enemy.transform.localPosition = new Vector3(gameData.EnemiesInActiveSection[i].enemyParentPosX, gameData.EnemiesInActiveSection[i].enemyParentPosY, 0);
 
                 Enemy.transform.GetChild(0).localPosition = new Vector3(gameData.EnemiesInActiveSection[i].enemyPosX, gameData.EnemiesInActiveSection[i].enemyPosY, 0);
 
                 Enemy.transform.GetChild(0).GetComponent<EnemyBase>().healthPoints = gameData.EnemiesInActiveSection[i].CurrentHealthPoints;
-
-                Enemy.transform.GetChild(0).GetComponent<EnemyBase>().isImmortal = gameData.EnemiesInActiveSection[i].isImmortal;
 
                 StartCoroutine(SetEnemyData(gameData, Enemy));
             }
@@ -147,17 +151,21 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
+        if (Input.GetKeyDown(KeyCode.F3))
+        {
+            infoToggle = !infoToggle;
+            Info.SetActive(infoToggle);
+        }
     }
 
     public void TimeSlow(int slowAmount = 100, float forSec = 1)
     {
-        slowAmount = Mathf.Clamp(slowAmount, 0, 100);
+        slowAmount = slowAmount < 0 ? 0 : slowAmount > 100 ? 100 : slowAmount;
         Time.timeScale = (100 - slowAmount) / 100.0f;
         StartCoroutine(TimeBackToNormal(forSec));
     }
 
-    private IEnumerator TimeBackToNormal(float sec)
+    IEnumerator TimeBackToNormal(float sec)
     {
         float startTime = Time.realtimeSinceStartup;
         while (Time.realtimeSinceStartup - startTime < sec)
@@ -192,7 +200,6 @@ public class GameManager : MonoBehaviour
                 {
                     id = _enemy.EnemyId,
                     CurrentHealthPoints = _enemy.healthPoints,
-                    isImmortal = _enemy.isImmortal,
 
                     enemyParentPosX = enemy.transform.localPosition.x,
                     enemyParentPosY = enemy.transform.localPosition.y,
