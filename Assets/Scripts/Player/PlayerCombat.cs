@@ -54,20 +54,16 @@ public class PlayerCombat : MonoBehaviour
 
         foreach (Collider2D hit in hitDamagable)
         {
-            if (hit.TryGetComponent<BreakableWall>(out var breakableWall))
-            {
-                breakableWall.Damage();
-            }
-
-            if (hit.TryGetComponent<EnemyBase>(out var enemyBase))
+            //Get the IDamageable interface if exist on the hit object and apply the damage and Fx to those who inherite from IDamageable interface 
+            if (hit.TryGetComponent<IDamageable>(out var damageable))
             {
                 // Check if the hit object has an EnemyData component
-                if (enemyBase != null)
+                if (damageable != null)
                 {
-                    GameManager.Instance.TimeSlow(100, 0.1f); //when enemy is hit it time stops for 0.1 sec for emphasis effect
+                    if (damageable.onHitFreezTime) GameManager.Instance.TimeSlow(100, 0.1f); //when enemy is hit it time stops for 0.1 sec for emphasis effect
 
-                    enemyBase.Damage();
-                    enemyBase.ApplyKnockBack(hitDirection);
+                    damageable.Damage();
+                    damageable.ApplyKnockBack(hitDirection);
                 }
             }
 
@@ -135,7 +131,8 @@ public class PlayerCombat : MonoBehaviour
             newPosition = new Vector3(0, attackDistance, 0);
             Slash.transform.localRotation = Quaternion.Euler(0, 0, 90);
         }
-        else if (Input.GetKey(KeyCode.S))
+
+        if (Input.GetKey(KeyCode.S) && !playerController.playerAnimator.isGrounded)
         {
             hitDirection = new Vector2(0, -1);
             newPosition = new Vector3(0, -attackDistance, 0);

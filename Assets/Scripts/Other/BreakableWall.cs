@@ -2,8 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BreakableWall : MonoBehaviour
+public class BreakableWall : MonoBehaviour, IDamageable
 {
+    public bool onHitFreezTime { get; set; }
+
     public enum TypeOfWall
     {
         Noraml,
@@ -34,13 +36,14 @@ public class BreakableWall : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        onHitFreezTime = false;
         effectSpawn = transform.GetChild(2);
         mask = transform.GetChild(0).GetComponent<SpriteMask>();
     }
 
-    public void Damage()
+    public void Damage(int damagePointMultiplier = 1)
     {
-        hitPoints--;
+        hitPoints -= damagePointMultiplier;
 
         if (hitPoints > 0)
         {
@@ -81,6 +84,11 @@ public class BreakableWall : MonoBehaviour
                 }
             }
         }
+    }
+
+    public void ApplyKnockBack(Vector2 direction)
+    {
+        //Wall wont get knocked backed, so the implimentation is NULL
     }
 
     void SpawnFx(GameObject FX)

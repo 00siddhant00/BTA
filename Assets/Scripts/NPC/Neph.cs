@@ -33,6 +33,7 @@ public class Neph : EnemyBase
     // Start is called before the first frame update
     void Start()
     {
+        onHitFreezTime = true;
         wave = transform.GetChild(transform.childCount - 1).GetComponent<SpriteRenderer>(); ;
         initialAttackRate = attackRate;
         currentIndex = 0;

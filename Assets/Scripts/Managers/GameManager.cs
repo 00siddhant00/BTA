@@ -15,10 +15,15 @@ public class GameManager : MonoBehaviour
     public ScenesManager SceneManager;
     public EnemyManager enemyManager;
     public CameraShake CameraShake;
+    public PuzzleBase PuzzleBase;
 
     [Header("Level")]
     public AreaData AreaData;
     public float gateSpawnDistance;
+
+    [Header("System")]
+    public GameObject Info;
+    bool infoToggle;
 
     private IDataService dataService = new JsonDataService();
 
@@ -146,7 +151,11 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
+        if (Input.GetKeyDown(KeyCode.F3))
+        {
+            infoToggle = !infoToggle;
+            Info.SetActive(infoToggle);
+        }
     }
 
     public void TimeSlow(int slowAmount = 100, float forSec = 1)
