@@ -1,10 +1,11 @@
 using System.Collections;
 using UnityEngine;
 
-public class EnemyBase : MonoBehaviour
+public class EnemyBase : MonoBehaviour, IDamageable
 {
     public int EnemyId;
     public int currentIndex;
+    public bool onHitFreezTime { get; set; }
 
     [Header("Health")]
     public int healthPoints = 2;
@@ -17,6 +18,7 @@ public class EnemyBase : MonoBehaviour
     protected float repelDistance = 100;
 
     [Header("Damage")]
+    [SerializeField] protected bool allowKnockback = true;
     [SerializeField] protected bool isKnockedBack = false;
     [SerializeField] protected float knockbackForce = 10f; // Adjust the force of the knockback.
     [SerializeField] protected float knockbackDuration = 0.5f; // Adjust the duration of the knockback.
@@ -26,6 +28,8 @@ public class EnemyBase : MonoBehaviour
 
     public void ApplyKnockBack(Vector2 direction)
     {
+        if (!allowKnockback) return;
+
         isKnockedBack = true;
         rb.velocity = Vector2.zero; // Clear any existing velocity.
         rb.AddForce(direction.normalized * knockbackForce, ForceMode2D.Impulse);

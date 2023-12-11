@@ -28,7 +28,8 @@ public class Pet : MonoBehaviour
             return;
         }
 
-        sr.flipX = !GameManager.Instance.playerController.playerMovement.lookingRight;
+        //sr.flipX = !GameManager.Instance.playerController.playerMovement.lookingRight;
+        sr.flipX = !GetComponent<Follow>().target.parent.GetComponent<PlayerMovement>().lookingRight;
     }
 
     public void SpawnFX()
