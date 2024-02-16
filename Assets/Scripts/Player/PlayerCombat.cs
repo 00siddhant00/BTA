@@ -79,7 +79,8 @@ public class PlayerCombat : MonoBehaviour
     IEnumerator OffSlash()
     {
         GameManager.Instance.pet.HidePet();
-        yield return new WaitForSeconds(0.1f);
+        yield return new WaitForSeconds((attackRate / 2) - 0.05f);
+        //yield return new WaitForSeconds(0.12f);
 
         GameManager.Instance.pet.ShowPet();
         slashing = false;
