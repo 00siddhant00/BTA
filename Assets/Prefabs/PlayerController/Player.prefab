@@ -49,10 +49,10 @@ MonoBehaviour:
   m_BlendStyleIndex: 0
   m_FalloffIntensity: 0.791
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_Intensity: 1.7
+  m_Intensity: 1
   m_LightVolumeIntensity: 1
   m_LightVolumeIntensityEnabled: 0
-  m_ApplyToSortingLayers: 0000000041daf2d68b3d5b163b8923e4677a9a54
+  m_ApplyToSortingLayers: 0000000041daf2d68b3d5b163b8923e4677a9a54a1e4d4ef95a67b97
   m_LightCookieSprite: {fileID: 0}
   m_DeprecatedPointLightCookieSprite: {fileID: 0}
   m_LightOrder: 0
@@ -71,7 +71,7 @@ MonoBehaviour:
   m_PointLightInnerAngle: 360
   m_PointLightOuterAngle: 360
   m_PointLightInnerRadius: 0
-  m_PointLightOuterRadius: 6.2
+  m_PointLightOuterRadius: 7
   m_ShapeLightParametricSides: 5
   m_ShapeLightParametricAngleOffset: 0
   m_ShapeLightParametricRadius: 1
@@ -165,10 +165,10 @@ MonoBehaviour:
   m_BlendStyleIndex: 0
   m_FalloffIntensity: 0.715
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_Intensity: 0.01
+  m_Intensity: 0.29
   m_LightVolumeIntensity: 1
   m_LightVolumeIntensityEnabled: 0
-  m_ApplyToSortingLayers: 0000000041daf2d68b3d5b163b8923e4677a9a54
+  m_ApplyToSortingLayers: 0000000041daf2d68b3d5b163b8923e4677a9a54a1e4d4ef95a67b97
   m_LightCookieSprite: {fileID: 0}
   m_DeprecatedPointLightCookieSprite: {fileID: 0}
   m_LightOrder: 0
@@ -225,7 +225,7 @@ Transform:
   m_GameObject: {fileID: 2417531333523807179}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.45, y: 0.35, z: 0}
+  m_LocalPosition: {x: -0.31, y: 0.5, z: 0}
   m_LocalScale: {x: 0.9189461, y: 0.79681224, z: 0.58769995}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -278,7 +278,7 @@ SpriteRenderer:
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 6.18, y: 4.53}
+  m_Size: {x: 4.002, y: 4.002}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -388,7 +388,7 @@ MonoBehaviour:
   m_Intensity: 2
   m_LightVolumeIntensity: 1
   m_LightVolumeIntensityEnabled: 0
-  m_ApplyToSortingLayers: 0000000041daf2d68b3d5b163b8923e4677a9a54
+  m_ApplyToSortingLayers: 0000000041daf2d68b3d5b16677a9a543b8923e4
   m_LightCookieSprite: {fileID: 0}
   m_DeprecatedPointLightCookieSprite: {fileID: 0}
   m_LightOrder: 0
@@ -464,6 +464,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   amplitude: 0.2
   speed: 2
+  move: 1
 --- !u!1 &4404688017365349262
 GameObject:
   m_ObjectHideFlags: 0
@@ -568,8 +569,8 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: -1753504107
+  m_SortingLayer: -2
   m_SortingOrder: -1
   m_Sprite: {fileID: 21300000, guid: 8e8906bab9c8be148b8a846b26d7fe88, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 0.972549}
@@ -628,7 +629,7 @@ Transform:
   m_GameObject: {fileID: 4901759665119007107}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 1.85, y: -0.71874976, z: 0}
+  m_LocalPosition: {x: 2, y: -0.71874976, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -706,8 +707,8 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: -1753504107
+  m_SortingLayer: -2
   m_SortingOrder: -1
   m_Sprite: {fileID: 21300000, guid: 378400f786d0d6a4fbac45b3c0fc2284, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 0.972549}
@@ -812,8 +813,8 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: -1753504107
+  m_SortingLayer: -2
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: af93d290aa790b444aac00f41b19de92, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -954,6 +955,7 @@ GameObject:
   - component: {fileID: 2872904046055329557}
   - component: {fileID: 4939846300784149436}
   - component: {fileID: 194912303028588880}
+  - component: {fileID: 7379118267793083708}
   - component: {fileID: 7268492526026312323}
   - component: {fileID: 1966265079697413188}
   - component: {fileID: 804426147657716709}
@@ -977,7 +979,7 @@ Transform:
   m_GameObject: {fileID: 8449816270720935518}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 23.48, y: 11.4, z: 0}
+  m_LocalPosition: {x: 13.979996, y: 12.97, z: 0}
   m_LocalScale: {x: 0.8, y: 0.8, z: 0.8}
   m_ConstrainProportionsScale: 1
   m_Children:
@@ -1050,6 +1052,72 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 1
   m_Constraints: 4
+--- !u!114 &7379118267793083708
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8449816270720935518}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 62899f850307741f2a39c98a8b639597, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Actions: {fileID: -944628639613478452, guid: 19af78932319a5f4cbc3dcce15f4ac63, type: 3}
+  m_NotificationBehavior: 2
+  m_UIInputModule: {fileID: 0}
+  m_DeviceLostEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_DeviceRegainedEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_ControlsChangedEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_ActionEvents:
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 6fa698b5-94ca-47b5-9d89-b5392b1706f6
+    m_ActionName: Movement/Move[/Keyboard/w,/Keyboard/s,/Keyboard/a,/Keyboard/d,/Keyboard/upArrow,/Keyboard/downArrow,/Keyboard/leftArrow,/Keyboard/rightArrow,/XInputControllerWindows/leftStick/up,/XInputControllerWindows/leftStick/down,/XInputControllerWindows/leftStick/left,/XInputControllerWindows/leftStick/right,/XInputControllerWindows/dpad/up,/XInputControllerWindows/dpad/down,/XInputControllerWindows/dpad/left,/XInputControllerWindows/dpad/right]
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 7268492526026312323}
+        m_TargetAssemblyTypeName: PlayerMovement, Assembly-CSharp
+        m_MethodName: OnJump
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: b895b905-3e57-4f8d-91b7-e58be1502a7a
+    m_ActionName: Movement/Jump[/Keyboard/space,/XInputControllerWindows/buttonSouth]
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 804426147657716709}
+        m_TargetAssemblyTypeName: PlayerCombat, Assembly-CSharp
+        m_MethodName: OnMele
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: 2b791972-d4c8-4426-a9b8-b6e8b6263e79
+    m_ActionName: Player/Mele[/Mouse/leftButton,/XInputControllerWindows/buttonWest,/XInputControllerWindows2/buttonWest]
+  m_NeverAutoSwitchControlSchemes: 0
+  m_DefaultControlScheme: 
+  m_DefaultActionMap: Player
+  m_SplitScreenIndex: -1
+  m_Camera: {fileID: 0}
 --- !u!114 &7268492526026312323
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1063,6 +1131,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Data: {fileID: 11400000, guid: 311e2b1c9c8f32240a79fba883437b3f, type: 2}
+  move: {fileID: 4355496265273770983, guid: 19af78932319a5f4cbc3dcce15f4ac63, type: 3}
   allowPlayerMovement: 0
   runMaxSpeed: 10
   runMaxSpeedNoPet: 7
@@ -1078,6 +1147,7 @@ MonoBehaviour:
     m_Bits: 8
   slowedGravity: 5
   isReplayingFuture: 0
+  startTimeInFutureWhenInFuture: 0
   spawnPoint: {fileID: 0}
 --- !u!114 &1966265079697413188
 MonoBehaviour:
@@ -1095,6 +1165,7 @@ MonoBehaviour:
   tiltSpeed: 0.06
   jumpFX: {fileID: 3234584074981126610, guid: ef64e6572022fbb47969c1618d73ef20, type: 3}
   landFX: {fileID: 3234584074981126610, guid: 0618e2f871341254cafc1ffc33fc18df, type: 3}
+  HitFX: {fileID: 1846695869184913483, guid: e5a25f1dea3691a488210df095706aa0, type: 3}
   isMoving: 0
   isGrounded: 0
 --- !u!114 &804426147657716709
@@ -1111,16 +1182,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   meleAllowed: 0
   attackPoint: {fileID: 7953520854289723574}
-  attackRange: 0.9
-  attackRate: 0.44
-  attackDistance: 1.75
+  attackRange: 1
+  attackRate: 0.45
+  attackDistance: 1.95
   damagableLayer:
     serializedVersion: 2
-    m_Bits: 832
+    m_Bits: 840
   Slash: {fileID: 2417531333523807179}
   slashing: 0
   knockBackForce: 25
   knockBackDuration: 0.5
+  altPet: {fileID: 0}
 --- !u!114 &7831658455218665146
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1137,6 +1209,7 @@ MonoBehaviour:
   healthSlotes: 5
   img: {fileID: 0}
   playerCurrentHealth: 1
+  playerMovement: {fileID: 0}
 --- !u!114 &5024144342631401536
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1152,15 +1225,19 @@ MonoBehaviour:
   spawnPoint: {fileID: 7953520854289723574}
   petPrefab: {fileID: 3137978312492729089, guid: b7d44f8fa6ce01c4cafb5b8bcb028976, type: 3}
   crosshairPrefab: {fileID: 4784787696183889908, guid: 89b132d621270234caeb29e38c14b084, type: 3}
-  aquiredPet: 0
-  healRate: 1.5
+  aquiredPet: 1
+  healRate: 0.7
   isThrown: 0
   isThrowing: 0
+  isHeal: 0
   PetThrowVelo: 29
   callBackDelay: 0.7
   isDrawingGizmo: 0
   maxGizmoLength: 10
   isButtonUp: 1
+  isRight: 0
+  dontMove: 0
+  scaleSmoothing: 0.1
 --- !u!114 &861772605765361084
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1178,6 +1255,7 @@ MonoBehaviour:
   playerAnimator: {fileID: 0}
   playerCombat: {fileID: 0}
   petAbality: {fileID: 0}
+  TimeFreezPanal: {fileID: 0}
   playerDataNoPet: {fileID: 11400000, guid: 4df93d090cbd9e3488932ee9d72c0865, type: 2}
   playerDataWithPet: {fileID: 11400000, guid: 311e2b1c9c8f32240a79fba883437b3f, type: 2}
   playerDataHeal: {fileID: 11400000, guid: 469521feb149f654ca27974de3c49414, type: 2}

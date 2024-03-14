@@ -9,7 +9,8 @@ public class PlayerSave : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKey(KeyCode.E))
+        //if (Input.GetKey(KeyCode.E))
+        if (PlayerInputHandler.Instance.SaveInput)
         {
             // Check if the 'E' key is being pressed and update the timer
             if (!isEKeyPressed)

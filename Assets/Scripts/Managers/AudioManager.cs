@@ -34,6 +34,7 @@ public class AudioManager : MonoBehaviour
     private void Start()
     {
         Play("Background");
+        Play("Atmos");
     }
 
     public void Play(string name)
@@ -58,6 +59,18 @@ public class AudioManager : MonoBehaviour
         }
 
         s.source.Pause();
+    }
+
+    public void Mute(string name, bool mute)
+    {
+        Sound s = Array.Find(sounds, sound => sound.name == name);
+        if (s == null)
+        {
+            Debug.LogWarning("Sound: " + name + " not found!");
+            return;
+        }
+
+        s.source.mute = mute;
     }
 
     public void PauseSfx()

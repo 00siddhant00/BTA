@@ -17,6 +17,7 @@ public class PlayerAnimator : MonoBehaviour
     [Header("Particle FX")]
     [SerializeField] private GameObject jumpFX;
     [SerializeField] private GameObject landFX;
+    [SerializeField] private GameObject HitFX;
     private ParticleSystem _jumpParticle;
     private ParticleSystem _landParticle;
     private Animator legsAnim;
@@ -78,9 +79,20 @@ public class PlayerAnimator : MonoBehaviour
         landPSettings.startColor = new ParticleSystem.MinMaxGradient(demoManager.SceneData.foregroundColor);
     }
 
-    private void MoveAnim()
+    public void MoveAnim()
     {
         legsAnim.SetBool("IsRunning", isMoving);
+    }
+
+    public void MoveAnim(bool move)
+    {
+        legsAnim.SetBool("IsRunning", move);
+    }
+
+    public void WallHit(Transform pos)
+    {
+        GameObject obj = Instantiate(HitFX, pos.position, Quaternion.identity);
+        Destroy(obj, 1);
     }
 
     private void CheckAnimationState()

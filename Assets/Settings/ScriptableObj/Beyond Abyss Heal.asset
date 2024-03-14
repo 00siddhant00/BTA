@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5759d6a660e3ac14dbd9a801bf9d7627, type: 3}
   m_Name: Beyond Abyss Heal
   m_EditorClassIdentifier: 
-  gravityStrength: -0.08
-  gravityScale: 0.008154944
+  gravityStrength: -0.8
+  gravityScale: 0.081549436
   fallGravityMult: 1.5
   maxFallSpeed: 18
   fastFallGravityMult: 1
@@ -26,10 +26,10 @@ MonoBehaviour:
   accelInAir: 1
   deccelInAir: 1
   doConserveMomentum: 0
-  jumpHeight: 0.01
+  jumpHeight: 0.1
   jumpTimeToApex: 0.5
-  jumpForce: 0.04
-  jumpCutGravityMult: 3.5
+  jumpForce: 0.4
+  jumpCutGravityMult: 0
   jumpHangGravityMult: 1
   jumpHangTimeThreshold: 0
   jumpHangAccelerationMult: 1

@@ -1,11 +1,13 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.Rendering;
 
 public class EnemyBase : MonoBehaviour, IDamageable
 {
     public int EnemyId;
     public int currentIndex;
     public bool onHitFreezTime { get; set; }
+    public bool timeFreezed;
 
     [Header("Health")]
     public int healthPoints = 2;
@@ -25,6 +27,13 @@ public class EnemyBase : MonoBehaviour, IDamageable
 
     //Miscellaneous
     protected Rigidbody2D rb; // Reference to the Rigidbody2D component.
+
+    public void TimeFreez(bool state)
+    {
+        timeFreezed = state;
+    }
+
+    #region Physics
 
     public void ApplyKnockBack(Vector2 direction)
     {
@@ -81,6 +90,8 @@ public class EnemyBase : MonoBehaviour, IDamageable
         }
     }
 
+    #endregion
+
     public void Damage(int damagePointMultiplier = 1)
     {
         GameManager.Instance.CameraShake.ShakeCamera(3, 0.15f, 0.35f);
@@ -96,5 +107,10 @@ public class EnemyBase : MonoBehaviour, IDamageable
             GameManager.Instance.playerController.playerMovement.SlowPlayerByPercent(0f);
             Destroy(transform.parent.gameObject);
         }
+    }
+
+    public void OnDestroy()
+    {
+        GameManager.Instance.playerController.petAbality.isHeal = false;
     }
 }

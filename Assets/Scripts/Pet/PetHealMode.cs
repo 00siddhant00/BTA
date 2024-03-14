@@ -9,7 +9,6 @@ public class PetHealMode : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D col)
     {
-        print(col.gameObject.name);
         if (!col.gameObject.CompareTag("Player") && !col.gameObject.CompareTag("Boundry"))
             GetComponent<Rigidbody2D>().velocity = Vector3.zero;
         if (col.gameObject.CompareTag("enemy"))

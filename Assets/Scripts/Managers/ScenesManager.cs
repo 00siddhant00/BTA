@@ -1,4 +1,6 @@
+using System;
 using System.Collections;
+using System.IO;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -57,6 +59,21 @@ public class ScenesManager : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Escape))
         {
             Application.Quit();
+        }
+    }
+
+    public void DeleteSavedData()
+    {
+        string filePath = Path.Combine(Application.persistentDataPath, "player-stats.json");
+
+        if (File.Exists(filePath))
+        {
+            File.Delete(filePath);
+            Debug.Log("Existing data file deleted successfully.");
+        }
+        else
+        {
+            Debug.LogWarning("Data file not found. No file deleted.");
         }
     }
 

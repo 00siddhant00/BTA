@@ -42,6 +42,8 @@ public class Loath : EnemyBase
 
     private void Update()
     {
+        if (timeFreezed) return;
+
         if (waypoints.Length > 0)
         {
             // Start the movement coroutine
