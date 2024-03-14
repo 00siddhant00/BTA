@@ -14,6 +14,7 @@ public class GameManager : MonoBehaviour
     [Header("Utilitis")]
     public ScenesManager SceneManager;
     public EnemyManager enemyManager;
+    public CutSceneManager cutSceneManager;
     public CameraShake CameraShake;
     public PuzzleBase PuzzleBase;
 
@@ -49,7 +50,7 @@ public class GameManager : MonoBehaviour
 
     void LoadData()
     {
-        bool dataExist = false;
+        bool dataExist;
         GameData gameData = new GameData();
         try
         {
@@ -66,6 +67,7 @@ public class GameManager : MonoBehaviour
         {
             playerController.transform.position = playerController.playerMovement.spawnPoint.transform.position;
             playerController.petAbality.aquiredPet = false;
+            SceneManager.ChangeSectionConfinier(0);
             return;
         }
 
@@ -78,14 +80,16 @@ public class GameManager : MonoBehaviour
         var _activeSetion = AreaData.transform.GetChild(gameData.LastActiveSection);
         _activeSetion.gameObject.SetActive(true);
 
+
+        #region Player Data Assignment
+
         pet.transform.parent = _activeSetion;
         playerController.transform.parent = _activeSetion;
         playerController.transform.SetAsFirstSibling();
 
         SceneManager.ChangeSectionConfinier(gameData.LastActiveSection);
 
-        #region Player Data Assignment
-
+        _activeSetion.GetComponent<SectionData>().playerInSection = true;
         //Load Player Health
         playerController.playerHealth.playerCurrentHealth = gameData.PlayerHealth != 0 ? gameData.PlayerHealth : 1f;
 
@@ -110,29 +114,28 @@ public class GameManager : MonoBehaviour
         //else if (!AreaData.transform.GetChild(gameData.LastActiveSection).GetComponent<SectionData>().hasEnemies) print($"{gameData.LastActiveSection} Section has no enemies");
 
         //Set Enemy Data
-        if (AreaData.transform.GetChild(gameData.LastActiveSection).GetComponent<SectionData>().hasEnemies)
+        //if (AreaData.transform.GetChild(gameData.LastActiveSection).GetComponent<SectionData>().hasEnemies)
+        //{
+        foreach (var enemy in AreaData.transform.GetChild(gameData.LastActiveSection).GetComponent<SectionData>().Enemies)
         {
-            foreach (var enemy in AreaData.transform.GetChild(gameData.LastActiveSection).GetComponent<SectionData>().Enemies)
-            {
-                Destroy(enemy);
-            }
-
-            GameObject Enemy = null;
-            //Respawn Enemies with saved stats
-            for (int i = 0; i < gameData.EnemiesInActiveSection.Count; i++)
-            {
-                Enemy = Instantiate(enemyManager.GetEnemyFromId(gameData.EnemiesInActiveSection[i].id), AreaData.transform.GetChild(gameData.LastActiveSection).GetComponent<SectionData>().Enemies[0].transform.parent);
-
-                Enemy.transform.localPosition = new Vector3(gameData.EnemiesInActiveSection[i].enemyParentPosX, gameData.EnemiesInActiveSection[i].enemyParentPosY, 0);
-
-                Enemy.transform.GetChild(0).localPosition = new Vector3(gameData.EnemiesInActiveSection[i].enemyPosX, gameData.EnemiesInActiveSection[i].enemyPosY, 0);
-
-                Enemy.transform.GetChild(0).GetComponent<EnemyBase>().healthPoints = gameData.EnemiesInActiveSection[i].CurrentHealthPoints;
-
-                StartCoroutine(SetEnemyData(gameData, Enemy));
-            }
-
+            Destroy(enemy);
         }
+        //Respawn Enemies with saved stats
+        for (int i = 0; i < gameData.EnemiesInActiveSection.Count; i++)
+        {
+            //GameObject Enemy = Instantiate(enemyManager.GetEnemyFromId(gameData.EnemiesInActiveSection[i].id), AreaData.transform.GetChild(gameData.LastActiveSection).GetComponent<SectionData>().Enemies[0].transform.parent);
+            GameObject Enemy = Instantiate(enemyManager.GetEnemyFromId(gameData.EnemiesInActiveSection[i].id), AreaData.transform.GetChild(gameData.LastActiveSection).GetChild(AreaData.transform.GetChild(gameData.LastActiveSection).GetComponent<SectionData>().playerInSection ? 1 : 0));
+
+            Enemy.transform.localPosition = new Vector3(gameData.EnemiesInActiveSection[i].enemyParentPosX, gameData.EnemiesInActiveSection[i].enemyParentPosY, 0);
+
+            Enemy.transform.GetChild(0).localPosition = new Vector3(gameData.EnemiesInActiveSection[i].enemyPosX, gameData.EnemiesInActiveSection[i].enemyPosY, 0);
+
+            Enemy.transform.GetChild(0).GetComponent<EnemyBase>().healthPoints = gameData.EnemiesInActiveSection[i].CurrentHealthPoints;
+
+            StartCoroutine(SetEnemyData(gameData, Enemy));
+        }
+
+        //}
 
     }
 

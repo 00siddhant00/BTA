@@ -1,6 +1,4 @@
-using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class SectionData : MonoBehaviour
@@ -9,7 +7,7 @@ public class SectionData : MonoBehaviour
     public bool playerInSection;
     public bool hasEnemies;
     public int noOfEnemies;
-    public List<GameObject> Enemies = new List<GameObject>();
+    public List<GameObject> Enemies = new();
     public int noOfObstacles;
     public int noOfDetachedPlatforms;
     public int noOfStaticBlocks;

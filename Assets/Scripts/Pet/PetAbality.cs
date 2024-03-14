@@ -1,4 +1,6 @@
 using UnityEngine;
+using UnityEngine.InputSystem;
+using UnityEngine.VFX;
 
 public class PetAbality : MonoBehaviour
 {
@@ -18,7 +20,7 @@ public class PetAbality : MonoBehaviour
     [Header("Pet Physics")]
     public bool isThrown = false;
     public bool isThrowing = false;
-    private bool isHeal = false;
+    public bool isHeal = false;
     private Rigidbody2D petRigidbody;
     [SerializeField] private float PetThrowVelo = 40f;
 
@@ -35,8 +37,13 @@ public class PetAbality : MonoBehaviour
     private PlayerCombat combatScript;
     private PlayerController playerController;
 
+    public bool isRight = false;
+
+    public bool dontMove;
+
     private void Awake()
     {
+        //Cursor.lockState = CursorLockMode.Locked;
         playerController = GetComponent<PlayerController>();
         combatScript = GetComponent<PlayerCombat>();
         playerMovement = GetComponent<PlayerMovement>();
@@ -48,8 +55,16 @@ public class PetAbality : MonoBehaviour
         }
     }
 
+    private void Start()
+    {
+        Cursor.visible = false;
+    }
+
     private void Update()
     {
+        Cursor.visible = false;
+        dontMove = isHeal || isThrowing ? true : false;
+
         if (aquiredPet)
         {
             InputChecks();
@@ -63,10 +78,62 @@ public class PetAbality : MonoBehaviour
         }
     }
 
+    //public void OnPetCallBack(InputAction.CallbackContext ctx)
+    //{
+    //    if (!aquiredPet) return;
+
+    //    if (ctx.performed)
+    //    {
+    //        if (isButtonUp)
+    //        {
+    //            isThrowing = true;
+    //            DrawGizmo();
+    //        }
+    //        else
+    //        {
+    //            Invoke(nameof(CallBackPet), callBackDelay);
+    //            StopHealing();
+    //        }
+    //    }
+    //}
+
+    //public void OnHealThrow(InputAction.CallbackContext ctx)
+    //{
+    //    if (!aquiredPet) return;
+
+    //    if (ctx.canceled && isThrowing)
+    //    {
+    //        playerMovement.IsFacingRight = Mathf.Sign(transform.localScale.x) == 1;
+    //    }
+    //    else if (ctx.canceled)
+    //    {
+    //        isThrowing = false;
+    //        if (isButtonUp)
+    //        {
+    //            ThrowPet();
+    //            PetStateCheck();
+    //        }
+
+    //        isButtonUp = !isButtonUp;
+    //    }
+    //}
+
+    //public void OnHeal(InputAction.CallbackContext ctx)
+    //{
+    //    if (!aquiredPet) return;
+
+    //    if (ctx.canceled && isThrown)
+    //    {
+    //        StopHealing();
+    //    }
+    //}
+
     void InputChecks()
     {
-        if (Input.GetMouseButtonDown(1))
+        //if (Input.GetMouseButtonDown(1))
+        if (PlayerInputHandler.Instance.IsPetThrow == 1)
         {
+            PlayerInputHandler.Instance.IsPetThrow = 0;
             if (isButtonUp)
             {
                 isThrowing = true;
@@ -79,13 +146,26 @@ public class PetAbality : MonoBehaviour
             }
         }
 
+        //if (Input.GetMouseButtonUp(1) && isThrowing)
+        if (PlayerInputHandler.Instance.IsPetThrow == 2 && isThrowing)
+        {
+            playerMovement.IsFacingRight = Mathf.Sign(transform.localScale.x) == 1;
+        }
+
+        if (isThrowing)
+        {
+            LookAtCrosshair();
+        }
+
         if (isDrawingGizmo)
         {
             DrawGizmo();
         }
 
-        if (Input.GetMouseButtonUp(1))
+        //if (Input.GetMouseButtonUp(1))
+        if (PlayerInputHandler.Instance.IsPetThrow == 2)
         {
+            PlayerInputHandler.Instance.IsPetThrow = 0;
             isThrowing = false;
             if (isButtonUp)
             {
@@ -94,10 +174,10 @@ public class PetAbality : MonoBehaviour
             }
 
             isButtonUp = !isButtonUp;
-
         }
 
-        if (Input.GetMouseButton(0) && isThrown && petInstance.GetComponent<PetHealMode>().foundEnemy)
+        //if (Input.GetMouseButton(0) && isThrown && petInstance.GetComponent<PetHealMode>().foundEnemy)
+        if (PlayerInputHandler.Instance.IsHealing && isThrown && petInstance.GetComponent<PetHealMode>().foundEnemy)
         {
             if (!onceInitialHeal)
             {
@@ -106,7 +186,8 @@ public class PetAbality : MonoBehaviour
             }
             Heal();
         }
-        else if (Input.GetMouseButtonUp(0) && isThrown)
+        //else if (Input.GetMouseButtonUp(0) && isThrown)
+        else if (PlayerInputHandler.Instance.IsPetCallBack && isThrown)
         {
             StopHealing();
         }
@@ -132,15 +213,11 @@ public class PetAbality : MonoBehaviour
                 combatScript.meleAllowed = true;
                 playerMovement.Data = playerController.playerDataWithPet;
             }
-            else if (isHeal)
-            {
-                playerMovement.Data = playerController.playerDataHeal;
-            }
         }
         else
         {
             combatScript.meleAllowed = false;
-            playerMovement.Data = playerController.playerDataHeal;
+            //playerMovement.Data = playerController.playerDataHeal;
         }
     }
 
@@ -241,6 +318,11 @@ public class PetAbality : MonoBehaviour
         isHeal = false;
     }
 
+    public float scaleSmoothing = 0.1f;  // Adjust this value based on your needs
+
+    void LookAtCrosshair() => transform.localScale = new Vector2(((endPoint - transform.position).x >= 0) ? 0.8f : -0.8f, transform.localScale.y);
+
+
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.gameObject.CompareTag("getPet"))
@@ -248,5 +330,10 @@ public class PetAbality : MonoBehaviour
             aquiredPet = true;
             Destroy(collision.gameObject);
         }
+    }
+
+    public void PetAquired(bool aquire)
+    {
+        aquiredPet = aquire;
     }
 }

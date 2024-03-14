@@ -465,6 +465,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   amplitude: 0.2
   speed: 2
+  move: 1
 --- !u!1 &4304730028688964373
 GameObject:
   m_ObjectHideFlags: 0
@@ -1131,6 +1132,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Data: {fileID: 11400000, guid: 311e2b1c9c8f32240a79fba883437b3f, type: 2}
+  move: {fileID: 4355496265273770983, guid: 19af78932319a5f4cbc3dcce15f4ac63, type: 3}
   allowPlayerMovement: 0
   runMaxSpeed: 10
   runMaxSpeedNoPet: 7
@@ -1164,6 +1166,7 @@ MonoBehaviour:
   tiltSpeed: 0.06
   jumpFX: {fileID: 3234584074981126610, guid: ef64e6572022fbb47969c1618d73ef20, type: 3}
   landFX: {fileID: 3234584074981126610, guid: 0618e2f871341254cafc1ffc33fc18df, type: 3}
+  HitFX: {fileID: 0}
   isMoving: 0
   isGrounded: 0
 --- !u!114 &804426147657716709
@@ -1190,6 +1193,7 @@ MonoBehaviour:
   slashing: 0
   knockBackForce: 25
   knockBackDuration: 0.5
+  altPet: {fileID: 0}
 --- !u!114 &7831658455218665146
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1226,11 +1230,15 @@ MonoBehaviour:
   healRate: 1.5
   isThrown: 0
   isThrowing: 0
+  isHeal: 0
   PetThrowVelo: 29
   callBackDelay: 0.7
   isDrawingGizmo: 0
   maxGizmoLength: 10
   isButtonUp: 1
+  isRight: 0
+  dontMove: 0
+  scaleSmoothing: 0.1
 --- !u!114 &861772605765361084
 MonoBehaviour:
   m_ObjectHideFlags: 0

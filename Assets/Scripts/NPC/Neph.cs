@@ -46,6 +46,8 @@ public class Neph : EnemyBase
     // Update is called once per frame
     void Update()
     {
+        if (timeFreezed) return;
+
         Move();
         Attack();
     }
@@ -157,6 +159,8 @@ public class Neph : EnemyBase
 
             if (Time.time >= nextTimeToAttack)
             {
+                if (playerCollider.name != "Player") return;
+
                 playerCollider.GetComponent<PlayerHealth>().DamagePlayer();
                 nextTimeToAttack = Time.time + attackRate;
                 attackRate = attackRate <= minimumAttackDelay ? minimumAttackDelay : attackRate - attackDecrementMultiplier;

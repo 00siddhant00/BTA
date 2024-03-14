@@ -1,10 +1,13 @@
 using UnityEngine;
+using UnityEngine.Rendering;
 
 public class Follow : MonoBehaviour
 {
     public Transform target;
     public float followSpeed;
     public bool destroyIfNullTarget;
+
+    public bool follow = true;
 
     public enum FollowType
     {
@@ -14,6 +17,16 @@ public class Follow : MonoBehaviour
 
     public FollowType followType;
 
+    public void FollowTarget(bool follow)
+    {
+        this.follow = follow;
+    }
+
+    public void ChangeTarget(Transform target)
+    {
+        this.target = target;
+    }
+
     // Update is called once per frame
     void Update()
     {
@@ -22,6 +35,8 @@ public class Follow : MonoBehaviour
 
     void FollowTarget()
     {
+        if (!follow) return;
+
         if (target != null)
             if (followType == FollowType.Fixed)
                 transform.position = target.position;

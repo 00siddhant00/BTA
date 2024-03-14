@@ -1,9 +1,7 @@
-using System;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using System.Collections;
-using static UnityEditor.ShaderGraph.Internal.KeywordDependentCollection;
 
 public class InputRecorder : MonoBehaviour
 {
@@ -16,6 +14,7 @@ public class InputRecorder : MonoBehaviour
     [Header("Future time variables")]
     public int noOfFutureTravel;
 
+    public bool timeFreezed;
     public bool inFuture;
     public bool goingInMultipleFutures;
     public bool multipleFuturesPlayerInstancePosChanged;
@@ -31,6 +30,7 @@ public class InputRecorder : MonoBehaviour
     public static InputRecorder i;
     public List<(Vector2, float)> moveInputHistory = new();
     public List<(int, float)> jumpInputHistory = new();
+    public List<(int, float)> meleInputHistory = new();
     [HideInInspector]
     public Vector2 PlayerPosRec;
 
@@ -151,8 +151,12 @@ public class InputRecorder : MonoBehaviour
         UpdatePresentTimer();
         UpdateUITimersList();
 
-        if (Input.GetKeyDown(KeyCode.F))
+        //if (Input.GetKeyDown(KeyCode.F))
+        if (PlayerInputHandler.Instance.AbilityActivate == 1)
         {
+            PlayerInputHandler.Instance.AbilityActivate = 0;
+            timeFreezed = true;
+            FreezTimeForAllEnemies(timeFreezed);
             //check if going back in future before pre recoded actions are completed if not then override new actions in future by reseting future configirations
             if (elapsedTimeInPresent < maxTimeInFuture + goToSecsInFuture && elapsedTimeInPresent > -1)
             {
@@ -187,8 +191,12 @@ public class InputRecorder : MonoBehaviour
             playerFutureInstanceInFuture.transform.position = presentPlayerPos;
 
         }
-        else if (Input.GetKeyUp(KeyCode.F))
+        //else if (Input.GetKeyUp(KeyCode.F))
+        else if (PlayerInputHandler.Instance.AbilityActivate == 2)
         {
+            PlayerInputHandler.Instance.AbilityActivate = 0;
+            timeFreezed = false;
+            FreezTimeForAllEnemies(timeFreezed);
             TogglePause();
             ModifySacredTime(goToSecsInFuture);
             if (goingInMultipleFutures)
@@ -283,7 +291,9 @@ public class InputRecorder : MonoBehaviour
             startTimeInFuture = (Time.time - elapsedTimeInFuture);
 
             //Reset player record time start input if traveling in multiple future
-            PlayerOfSacredTimeLine.GetComponent<PlayerMovement>().startTimeInFutureWhenInFuture = startTimeInFuture;
+            PlayerOfSacredTimeLine.GetComponent<PlayerMovement>().startTimeInFutureWhenInFutureForMove = startTimeInFuture;
+            PlayerOfSacredTimeLine.GetComponent<PlayerMovement>().startTimeInFutureWhenInFutureForJump = startTimeInFuture;
+            PlayerOfSacredTimeLine.GetComponent<PlayerMovement>().startTimeInFutureWhenInFutureForMele = startTimeInFuture;
         }
         else
         {
@@ -318,4 +328,14 @@ public class InputRecorder : MonoBehaviour
         // Calculate the elapsed time
         elapsedTimeInPresent = Time.time - startTimeInPresent;
     }
+
+
+    void FreezTimeForAllEnemies(bool state)
+    {
+        foreach (var enemy in GameManager.Instance.AreaData.transform.GetChild(GameManager.Instance.AreaData.activeSectionId).GetComponent<SectionData>().Enemies)
+        {
+            enemy.transform.GetChild(0).GetComponent<EnemyBase>().TimeFreez(state);
+        }
+    }
 }
+

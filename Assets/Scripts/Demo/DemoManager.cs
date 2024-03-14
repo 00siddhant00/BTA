@@ -28,7 +28,7 @@ public class DemoManager : MonoBehaviour
     {
         SetSceneData(SceneData);
         SwitchLevel(0);
-        SwitchPlayerType(0);
+        //SwitchPlayerType(0);
     }
 
     public void SetSceneData(SceneData data)

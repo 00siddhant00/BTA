@@ -12,24 +12,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5759d6a660e3ac14dbd9a801bf9d7627, type: 3}
   m_Name: Beyond Abyss No Pet
   m_EditorClassIdentifier: 
-  gravityStrength: -28
-  gravityScale: 2.8542302
+  gravityStrength: -57.14286
+  gravityScale: 5.82496
   fallGravityMult: 2
   maxFallSpeed: 18
   fastFallGravityMult: 1
   maxFastFallSpeed: 20
   runMaxSpeed: 7
-  runAcceleration: 6.425426
-  runAccelAmount: 45.8959
-  runDecceleration: 6.425426
-  runDeccelAmount: 45.8959
+  runAcceleration: 5.264917
+  runAccelAmount: 37.60655
+  runDecceleration: 5.264917
+  runDeccelAmount: 37.60655
   accelInAir: 1
-  deccelInAir: 1
+  deccelInAir: 0
   doConserveMomentum: 0
   jumpHeight: 3.5
-  jumpTimeToApex: 0.5
-  jumpForce: 14
-  jumpCutGravityMult: 3.5
+  jumpTimeToApex: 0.35
+  jumpForce: 20
+  jumpCutGravityMult: 2
   jumpHangGravityMult: 1
   jumpHangTimeThreshold: 0
   jumpHangAccelerationMult: 1
